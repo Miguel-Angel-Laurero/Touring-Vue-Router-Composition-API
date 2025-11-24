@@ -1,6 +1,7 @@
 <script setup>
 import EventService from "@/services/EventService.js";
 import { computed, onMounted, ref } from "vue";
+import { RouterLink } from "vue-router";
 
 const props = defineProps(["id"]);
 
@@ -20,7 +21,19 @@ onMounted(() => {
 <template>
   <div v-if="event">
     <h1>{{ event.title }}</h1>
-    <p>{{ event.time }} on {{ event.date }} @ {{ event.location }}</p>
-    <p>{{ event.description }}</p>
+    <div id="nav">
+      <router-link :to="{ name: 'EventDetails'}"
+        >Details</router-link
+      >
+      |
+      <router-link :to="{ name: 'EventRegister'}"
+        >Register</router-link
+      >
+      |
+      <router-link :to="{ name: 'EventEdit'}"
+        >Edit</router-link
+      >
+    </div>
+    <router-view :event="event"/>
   </div>
 </template>
