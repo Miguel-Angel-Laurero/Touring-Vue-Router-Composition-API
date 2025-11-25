@@ -5,16 +5,22 @@ import EventDetails from "@/views/event/Details.vue";
 import EventRegister from "@/views/event/Register.vue";
 import EventEdit from "@/views/event/Edit.vue";
 import About from "@/views/About.vue";
+import NotFound from "@/views/NotFound.vue";
+import NetworkError from "@/views/NetworkError.vue";
+
+const about = () => import(/* webpackChunkName: "about" */ '../views/About.vue');
 
 const routes = [
   {
+
+
     path: "/",
     name: "EventList",
     component: EventList,
     props:route => ({page: parseInt(route.query.page)  || 1 } )
   },
   {
-    path: "/event/:id",
+    path: "/events/:id",
     name: "EventLayout",
     props: true,
     component: EventLayout,
@@ -31,15 +37,47 @@ const routes = [
       },
       {
         path: "edit",
-        name: "EventEdit",
+         name: "EventEdit",
         component: EventEdit,
       },
+      // children[
+      //   {path: 'register' , redirect: () => ({name: 'EventRegister'})},
+      //   {path: 'edit' , redirect: () => ({name: 'EventEdit'})}
+      // ]
     ]
+  },
+  // {
+  //   path: '/event/:id',
+  //   redirect: () => {
+  //     return{name: 'EventDetails'}
+  //   }
+  // },
+  {
+    path: '/event/:afterEvent(.*)',
+    redirect: to => {
+      return{path: '/events/' + to.params.afterEvent}
+    }
   },
   {
     path: "/about",
     name: "About",
-    component: About,
+    component: about,
+  },
+  {
+    path: '/404/:resource',
+    name: '404Resource',
+    component: NotFound,
+    props: true
+  },
+  {
+    path: '/network-error',
+    name: 'NetworkError',
+    component: NetworkError
+  },
+  {
+    path: '/:catchAll(.*)', //match all the routes that don´t match an existing route
+    name: "NotFound",
+    component: NotFound,
   },
 ];
 
